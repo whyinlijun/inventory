@@ -25,7 +25,7 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
-@click.command('init-dbs') #这里的字符串就是配合flask命令行要用到字符
+@click.command('init-db') #这里的字符串就是配合flask命令行要用到字符
 @with_appcontext
 def init_db_command():
     """ Clear the existing data and create new tables."""
