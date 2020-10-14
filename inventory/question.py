@@ -76,12 +76,12 @@ def db_init(db_conn):
         )
     db_conn.commit()
 
-def save_to_database(filename, pre_id='_', q_type='1'):
+def save_to_database(conn, filename, pre_id='_', q_type='1'):
     '''
     qtype:1为单选，2为多选，3为判断
     '''
-    conn = sqlite3.connect("../instance/question.sqlite")
-    db_init(conn)
+    
+
     r_list = read_data_from_file(filename)
     for item in r_list:
         q = question(item)
@@ -90,14 +90,27 @@ def save_to_database(filename, pre_id='_', q_type='1'):
             (pre_id + q['id'], q_type, q['question'], '\n'.join(q['answer_list']), q['answer'])
             )
         conn.commit()
+    
+
+
+def  test(filename):
+    r_list = read_data_from_file(filename)
+    for item in r_list:
+        question(item)
+
+def main(init_db=None):
+    conn = sqlite3.connect("../instance/question.sqlite")
+    if init_db:
+        db_init(conn)
+    q_pre = input("请输入前缀：")
+    fs = input('请输入读取文件名：')
+    save_to_database(conn, fs, q_pre)
     conn.close()
 
 
-def  main():
-    pass
-
 if __name__ =="__main__":
-    print('OK')
-    save_to_database('bb.txt', 'A')
+    main()
+    #test('onechoice-two.txt')
+    
 
 
