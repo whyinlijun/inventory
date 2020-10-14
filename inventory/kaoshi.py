@@ -10,7 +10,7 @@ with open('bb.txt','r',encoding='utf8') as f:
 t = open('1.txt','a+')
 a = 0
 os.system('CLS')
-for i in range(1,3):
+for i in range(1,8):
     try:
         #匹配题目
         s = re.search('(' + str(i) + '\..*?)' + str(i + 1) + '\.', st, re.S)

@@ -1,42 +1,103 @@
 import re
-q_sting = """1.专职安全生产管理人负定指经建设主管部门或者其他有关部门安全生产老考核合格取得安全生产考核合格证书,并在建筑施工企业及其项目从事(B)工作的专职人员,
-A.施工管理
-B.安全生产管理
-C.工程技术
-D.工程机械
-2.建筑施工企业应当依法设置(C),在企业主要负责人的3领导下开展本企业的安全生产管理工作.
-A.项目负责人
-B.工程管理机构
-C.安全生产管理机构
-D.安全管理人员
-3.
-"""
+import sqlite3
 
-def question(q_sting):
-    q_list = q_sting.split('\n')
+def read_data_from_file(filename):
+    r_list = []
+    error = 0
+    with open(filename, 'r',encoding='utf8') as f:
+        content = f.read()
+        #提取题目前的序号，以数字开头以点结尾
+        num = re.findall('(^\d+)[./,]',content,re.M)
+        #确定有多少题，最后一个减前一个，并且最后一个与总数相差不大于10
+        if int(num[-1])  - int(num[-2]) == 1 and len(num) - int(num[-1])<10:
+            rows = int(num[-1])
+        else:
+            rows = len(num)
+        for i in range(1,rows):
+            #print(i)
+            try:
+                a= re.search(
+                    '(' + str(i) + '[\.|,].*?)' + str(i + 1)+'[\.|,]' , content, re.S
+                    ).group(1)
+                r_list.append(a)
+            except:
+                print(i)
+                error += 1
+        print('试题分段错误{}'.format(error,))
+    return r_list
+
+def question(q_string):
+    error = 0
     q_dict = {}
-    r_compile=re.compile('\(([a-zA-Z])\)')
-    q_dict['answer'] = r_compile.search(q_list[0]).group()[1]
-    q_dict['question']=re.sub(r_compile, '(   )', q_list[0])
-    q_dict['amswer_list'] = q_list[1:]
-    q_dict['id'] = re.match('\d+', q_list[0]).group()
+    q_list = q_string.split('\n')
+    q_rows = len(q_list)
+    q = q_list[0].strip()
+    if q_rows>5:
+        for i in range(1,q_rows-5):
+            q += q_list[i].strip()
+    r_compile=re.compile('[\(|（]([a-gA-G])[\)|）]',re.S)
+    try:
+        q_dict['answer'] = r_compile.search(q).group(1)
+        q_dict['question']=re.sub(r_compile, '(   )', q)
+        if q_rows>5:
+            q_dict['answer_list'] = q_list[q_rows-5:]
+        else:
+            q_dict['answer_list'] = q_list[1:]
+        q_dict['id'] = re.match('\d+', q).group()
+        #print(q_dict)
+    except:
+        print(q_string)
     return q_dict
 
-with open("bb.txt", 'r',encoding='utf8') as f:
-    txt = f.read()
-    '''
-    questions = re.findall('\d.*?D\.', txt,re.S)
-    for i in questions:
-        print(i)
-    print(len(questions))
-    '''
+def db_init(db_conn):
+    db_conn.execute("DROP TABLE  IF EXISTS question")
+    db_conn.execute(
+        """CREATE TABLE IF NOT EXISTS question (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            xuhao TEXT,
+            q_type TEXT,
+            question TEXT NOT NULL,
+            answer_list TEXT NOT NULL,
+            answer text NOT NULL) """
+        )
+    db_conn.execute("DROP TABLE  IF EXISTS wrongs")
+    db_conn.execute(
+        """CREATE TABLE IF NOT EXISTS wrongs(
+            id INTEGER PRIMARY KEY NOT NULL,
+            count INTEGER DEFAULT 1)"""
+        )
+    db_conn.execute("DROP TABLE  IF EXISTS counts")
+    db_conn.execute(
+        """CREATE TABLE IF NOT EXISTS counts(
+            id INTEGER PRIMARY KEY NOT NULL,
+            selected_times INTEGER DEFAULT 1,
+            right_times INTEGER ,
+            wrong_times INTEGER)"""
+        )
+    db_conn.commit()
 
- 
-    for i in range(1,559):
-        #item = re.findall(r'(1.*)2\.', q_sting, re.S)
-        #c_string = r'(^{}.*){}\.'.format(str(i),str(i+1))
-        print(i)
-        a= re.search('(' + str(i) + '.*?)' + str(i + 1) , txt, re.S).group(1)
-        print(a)
-      
+def save_to_database(filename, pre_id='_', q_type='1'):
+    '''
+    qtype:1为单选，2为多选，3为判断
+    '''
+    conn = sqlite3.connect("../instance/question.sqlite")
+    db_init(conn)
+    r_list = read_data_from_file(filename)
+    for item in r_list:
+        q = question(item)
+        conn.execute(
+            "INSERT INTO question (xuhao, q_type, question, answer_list, answer) VALUES(?,?,?,?,?)",
+            (pre_id + q['id'], q_type, q['question'], '\n'.join(q['answer_list']), q['answer'])
+            )
+        conn.commit()
+    conn.close()
+
+
+def  main():
+    pass
+
+if __name__ =="__main__":
+    print('OK')
+    save_to_database('bb.txt', 'A')
+
 
