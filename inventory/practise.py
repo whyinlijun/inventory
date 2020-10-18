@@ -47,25 +47,29 @@ def practise(conn, questions):
                 m_cursor.execute("REPLACE INTO wrongs VALUES (?, ?)",(q['id'], r_wrong['count']+1 ))
             else:
                 m_cursor.execute("INSERT INTO wrongs (id) VALUES (?)",(q['id'],))
-            m_cursor.execute("SELECT * FROM counts WHERE id=?", (q['id'],))
-            r_count = m_cursor.fetchone()
-            if r_count:
-                m_cursor.execute(
-                    "REPLACE INTO counts (id, selected_times, wrong_times) VALUES(?, ?, ?)",
-                    (q['id'], r_count['selected_times']+1, r_count['wrong_times']+1 )
-                    )
-            else:
-                m_cursor.execute("INSERT INTO counts (id, wrong_times ) VALUES(?, ?)",(q['id'], 1))
+        
         print("正确答案是{}".format(q['answer']))
         input()
     print("练习结束，共练习{}题，总得分{}分，正确{}题，错误{}题，正确率{:.2f}%".format(
         counts, defen, rights, wrongs, rights/counts*100))
 
+def select_from_sql(sql, conn):
+    m_cursor = conn.cursor()
+    m_cursor.execute(sql)
+    r = m_cursor.fetchall()
+    m_cursor.close()
+    return r
 
 def main():
     conn = sqlite3.connect("../instance/question.sqlite")
     conn.row_factory=sqlite3.Row
-    r = select_from_db(conn, '1', 2)
+    print("请输入练习模式，1为自由练习，2为错题练习")
+    choice = input("：")
+    if choice == '1':    
+        sql_s = input("请输入sql语句:  ")
+    else:
+        sql_s = "SELECT * FROM question INNER JOIN wrongs ON question.id = wrongs.id"
+    r = select_from_sql(sql_s, conn)
     practise(conn, r)
     conn.commit()
     conn.close()
