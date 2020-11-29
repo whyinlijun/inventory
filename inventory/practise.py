@@ -60,15 +60,17 @@ def select_from_sql(sql, conn):
     m_cursor.close()
     return r
 
-def main():
+def main(sql_s=None):
     conn = sqlite3.connect("../instance/question.sqlite")
     conn.row_factory=sqlite3.Row
-    print("请输入练习模式，1为自由练习，2为错题练习")
-    choice = input("：")
-    if choice == '1':    
-        sql_s = input("请输入sql语句:  ")
-    else:
-        sql_s = "SELECT * FROM question INNER JOIN wrongs ON question.id = wrongs.id"
+    if not sql_s :
+        print("请输入练习模式，1为自由练习，2为错题练习")
+        choice = input("：")
+        if choice == '1':    
+            sql_s = input("请输入sql语句:  ")
+            
+        else:
+            sql_s = "SELECT * FROM question INNER JOIN wrongs ON question.id = wrongs.id"
     r = select_from_sql(sql_s, conn)
     practise(conn, r)
     conn.commit()
@@ -76,4 +78,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sql = "SELECT * FROM question WHERE q_type='1' AND xuhao like 'sw%' ORDER BY random() limit 30"
+    main(sql)
