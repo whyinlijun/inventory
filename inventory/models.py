@@ -17,3 +17,6 @@ class Cloth(db.Model):
     width = db.Column(db.Float)
     fibre = db.Column(db.String(50))
     photo = db.Column(db.LargeBinary)
+
+    def __repr__(self):
+        return '<Cloth %r>' % self.color_name
