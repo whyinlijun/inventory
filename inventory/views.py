@@ -1,8 +1,27 @@
-from flask import render_template
-from inventory import app
+from flask import render_template, redirect, url_for
+from inventory import app, db
 from inventory.forms import ClothForm
+from inventory.models import Cloth
+
+
+@app.route('/addcloth', methods=['GET', 'POST'])
+def add_cloth():
+    form = ClothForm()
+    if form.validate_on_submit():
+        cloth = Cloth(
+                        color_name=form.color_name.data,
+                        supplier=form.supplier.data,
+                        width=form.width.data,
+                        fibre=form.fibre.data
+                        )
+        db.session.add(cloth)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('add_cloth.html', form=form)
 
 @app.route('/')
 def index():
-    form = ClothForm()
-    return render_template('add_cloth.html', form=form)
+    datas = Cloth.query.all()
+    for item in datas:
+        print(item.color_name)
+    return render_template('index.html', datas=datas)

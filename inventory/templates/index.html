@@ -1,0 +1,19 @@
+<table border=1>
+    <tr>
+        <th>序号</th>
+        <th>颜色</th>
+        <th>门幅</th>
+        <th>供应商</th>
+        <th>材质</th>
+    </tr>
+{% for data in datas %}
+<tr>
+    <td>{{data.id}}</td>
+    <td>{{data.color_name}}</td>
+    <td>{{data.width}}</td>
+    <td>{{data.supplier}}</td>
+    <td>{{data.fibre}}</td>
+
+</tr>
+{% endfor %}
+</table>
