@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from inventory import app, db
 from inventory.forms import ClothForm
 from inventory.models import Cloth
@@ -25,3 +25,14 @@ def index():
     for item in datas:
         print(item.color_name)
     return render_template('index.html', datas=datas)
+
+@app.route("/add", methods=['GET','POST'])
+def add():
+    if request.method=="POST":
+        formData = request.form
+        c_data = request.form.getlist('color')
+        b_data = request.form.getlist('length')
+        d_data = request.form.getlist('price')
+        
+        return ';'.join(c_data)+ ';'.join(b_data)+';'.join(d_data)
+    return render_template("add_cloth_order.html")
