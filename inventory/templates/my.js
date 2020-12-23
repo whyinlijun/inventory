@@ -15,6 +15,6 @@ $(document).ready(function(){
     });
 
 });
-function delRow(){
-    alert($(this).text());
+function delRow(id){
+    $(id).parents("tr").hide();
 };

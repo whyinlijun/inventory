@@ -1,4 +1,4 @@
-<!--
+﻿<!--
     1 测试JS文件是否必须放在静态文件目录
     2 测试添加表单功能
     3 测试同名控件的值传递
@@ -21,7 +21,7 @@
             <td><input type='text' name='color' value='13#'></td>
             <td><input type='text' name='length' value='100'></td>
             <td ><input type='text' name='price' value='8.3'></td>
-            <td><span onclick='delRow(this)'>delete</span></td>
+            <td><p onclick='delRow(this)'>delete</p></td>
         </tr>
         <tr id='tb_tail' ><td colspan=3><a href="#" id='add_row'>增加一行</a><input type="submit" /></td></tr>
 
@@ -29,4 +29,3 @@
 </form>
 
 
-<script src="{{ url_for('static', filename='myl.js') }}"></script>

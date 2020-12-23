@@ -9,8 +9,14 @@ $(document).ready(function(){
                         <td><input type='text' name='color' value='13#'></td>\
                         <td><input type='text' name='length' value='100'></td>\
                         <td ><input type='text' name='price' value='8.3'></td>\
+                        <td><span onclick='delRow(this)'>delete</span></td>\
                     </tr>"
         $('#tb_tail').before(my_html);
         
     });
+
 });
+
+function delRow(id){
+    $(id).parents("tr").hide();
+};
