@@ -20,3 +20,11 @@ class Cloth(db.Model):
 
     def __repr__(self):
         return '<Cloth %r>' % self.color_name
+
+class Customer(db.Model):
+    #客户信息表
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+
+    def __repr__(self):
+        return '<Cloth %r>' % self.name

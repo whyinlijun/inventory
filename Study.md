@@ -1,4 +1,4 @@
-# markdown语法
+﻿# markdown语法
 1. 标题         # 或另起一行用=和-，表示一级标题和二级标题
 2. 字体 *和_
     - 加粗    **加粗字体** 或 __加粗字体__
@@ -55,3 +55,5 @@ maya@mailkx.com
 
 https://www.jq22.com/jquery-info17692
 http://www.mayaship.com
+
+https://www.vkw4.com/#/vodDetail?id=300847&title=,oc3010,oc6b27,oc7f8e,oc3011,oc0053,oc0065,oc0078,oc0041,oc0072,oc0074,oc0020,oc2013,oc0020,oc0041,oc006c,oc0065,oc0078,oc0069,oc0073,oc0020,oc0043,oc0072,oc0079,oc0073,oc0074,oc0061,oc006c,oc0020,oc0028,oc0052,oc0069,oc0076,oc0065,oc0072,oc0029

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}订单处理{% endblock %}
+
+
+<div  class="container" style="text-align:center;">            
+    <div class="row">
+        <div class="col-xs-7 " >
+            <h1 style="text-align:center;">销 售 单</h1>
+            <table  class="table table-striped">
+                <form role="form"></form>
+                <caption>
+                    <div class="row">
+                        <div class="col-xs-4"><input type='text' class="form-control" value='123456'></div>
+                        <div class="col-xs-4">
+                            <select class="form-control">
+                                <option>Jack</option>
+                                <option>ROSE</option>
+                                <option>ZHU BI TE</option>
+                                <option>David</option>
+                                <option>John</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-xs-3"><input type="date"  id="order_date" class="form-control" required style="width:220px;"></div>
+                    </div>
+                </caption>
+                <thead>
+                <tr >
+                    <th style="text-align: center;">序号</th>
+                    <th style="text-align: center;">品名</th> <!--这里要用选择更表框-->
+                    <th style="text-align: center;">单价</th> <!--品名选定，单价就要出来-->
+                    <th style="text-align: right;">数量</th>  
+                    <th style="text-align: right;">小计</th> <!--如果单价和数量都有，小计就要出来结果-->
+                    <td> </td>
+                </tr>
+                </thead>
+                
+                <tbody>
+                
+                <tr>
+                    <td style="vertical-align: middle;">1</td>
+                    <td><select class="form-control">
+                        <option>圆领短袖连衣裙</option>
+                        <option>竹节棉V领喇叭袖</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select></td>
+                    <td style="text-align: right; vertical-align: middle;">20</td>
+                    <td ><input type="number" class="form-control quantity" style="text-align: right; " name="quantity" placeholder="请输入数量"  autocomplete="off" required></td>
+                    <td style="text-align: right; vertical-align: middle;">0</td>
+                    <td><span id='del_row' onclick='delRow(this)'>X</span></td>
+                </tr>
+                <tr id='last_row' style="font-size: large;">
+                    <td ></td>
+                    <td></td>
+                    <td></td>
+                    <td id='quantity' style="text-align: right;">0</td>
+                    <td id='amount' style="text-align: right;">0</td>
+                    <td ><span id='add_row' >+</span></td>
+                </tr>
+            
+                </tbody>
+            </form>
+            </table>
+    </div>
+</div>
+</div>
+
