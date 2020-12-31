@@ -27,4 +27,19 @@ class Customer(db.Model):
     name = db.Column(db.String(20))
 
     def __repr__(self):
-        return '<Cloth %r>' % self.name
+        return '<Customer %r>' % self.name
+
+class Goods(db.Model):
+    #商品信息表
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), unique=True)
+    price = db.Column(db.Float)
+
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+
+    def __repr__(self):
+        return '<Goods %r>' % self.name
+

@@ -40,13 +40,21 @@ var xuhao = 2;
                 $("#quantity").text(myQuantity());
 
             });
+
+            $('tbody').on("change", "select",function(){
+                var url='/getprice?id='+$(this).val()
+                var data_1=
+                $.get(url,function(data,status){
+                    data_1 = data;
+                });
+                alert(data_1)
+            });
+
         });
 
-          $('tbody').on('change', 'select', function(){
-            //当选择列表发生改变时
-            $alert('some one');
-            $(this).parent().next().text('变了');
-          });
+        
+
+
 
         function delRow(id){
             // 删除一行并将序号栏重新编码，数据重新统计

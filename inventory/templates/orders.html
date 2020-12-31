@@ -127,6 +127,10 @@
             });
         });
 
+        $('tbody').on("change", "select",function(){
+               alert('bb')
+        });
+
         function delRow(id){
             // 删除一行并将序号栏重新编码，数据重新统计
             //设置序号为删除那一栏的序号

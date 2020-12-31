@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from inventory import app, db
 from inventory.forms import ClothForm
-from inventory.models import Cloth, Customer
+from inventory.models import Cloth, Customer, Goods
 
 
 @app.route('/addcloth', methods=['GET', 'POST'])
@@ -35,6 +35,12 @@ def add_customer():
         cus_dict[item.id]=item.name
     return cus_dict
 
+@app.route('/getprice')
+def get_price():
+    if 'id' in request.values:
+        price = Goods.query.get(int(request.values.get('id')))
+        print(price.price)
+    return str(price.price)
 
 @app.route('/')
 def index():
@@ -56,4 +62,6 @@ def add():
 
 @app.route('/test')
 def test():
-    return render_template("addorder.html")
+    custom=Customer.query.all()
+    goods = Goods.query.all()
+    return render_template("addorder.html", data={'custom':custom, 'goods':goods})
