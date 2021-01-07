@@ -2,18 +2,22 @@ var xuhao = 2;
         $(function(){
             //设置日期
             $("#order_date").val(myDate());
-            //攻取html
+            $("#order_id").val(getOrderId($("#order_date").val(), $("#customer").val()));
+            $("#customer").change(function(){
+                $("#order_id").val(getOrderId($("#order_date").val(), $("#customer").val()));
+            })
+            $("#order_date").change(function(){
+                $("#order_id").val(getOrderId($("#order_date").val(), $("#customer").val()));
+            })
+            //获取需要重复的html
             var get_html=$('tbody').children().eq(0).html();
-            
-           
+
             $('#add_row').click(function(){
                 //当有输入框数量没有输入时，不可以增加一行
                 //var flag=checkQuantityInput();
                 if(checkQuantityInput('.quantity')){
                     $('#last_row').before('<tr>'+get_html.replace('<td>1</td>','<td>'+ xuhao++ +'</td>')+'</tr>');
                 };
-
-                
             });
 
             //输入框回车动作
@@ -42,12 +46,15 @@ var xuhao = 2;
             });
 
             $('tbody').on("change", "select",function(){
-                var url='/getprice?id='+$(this).val()
-                var data_1=
-                $.get(url,function(data,status){
-                    data_1 = data;
-                });
-                alert(data_1)
+                //商品选择后，标出相应价格
+                var url='/getprice?id='+$(this).val();
+                var tar=$(this).parent().next();
+                $.ajax({url:url,success:function(result){
+                    tar.text(result);
+                }});
+                var tr=$(this).parentsUntil('tbody')
+                $(tr).find(".quantity").val('10');
+                //$(tar).next().children('.quantity').focus();
             });
 
         });
@@ -107,3 +114,16 @@ var xuhao = 2;
             date = d.getDate()
             return year + '-' + month + '-' + date
         };
+
+        function getOrderId(ordate,name){
+            var d=new Date()
+            hour = d.getHours()
+            min = d.getMinutes()
+            sec = d.getSeconds()
+            var c = new Date(ordate)
+            year = c.getFullYear()
+            month = c.getMonth() + 1
+            day = c.getDate()
+            return year+String(month)+day+String(hour)+String(min)+sec+'-'+name
+        };
+
