@@ -43,3 +43,27 @@ class Goods(db.Model):
     def __repr__(self):
         return '<Goods %r>' % self.name
 
+class Orders(db.Model):
+    #订单表
+    ID = db.Column(db.String(30), primary_key=True)
+    customer = db.Column(db.String(20))
+    date = db.Column(db.String(15), index=True)
+    quantity = db.Column(db.Integer)
+    amount = db.Column(db.Float)
+
+    def __repr__(self):
+        return '<Orders %r>' % self.order_ID
+
+class OrderDetail(db.Model):
+    #订单详情
+    id = db.Column(db.Integer, primary_key=True)
+    order_ID = db.Column(db.String(30), index=True)
+    goods_name = db.Column(db.String(30))
+    goods_quantity = db.Column(db.Integer)
+    goods_amount = db.Column(db.Float)
+
+
+
+
+
+

@@ -9,6 +9,8 @@ var xuhao = 2;
             $("#order_date").change(function(){
                 $("#order_id").val(getOrderId($("#order_date").val(), $("#customer").val()));
             })
+            $('.quantity').eq(0).focus()
+
             //获取需要重复的html
             var get_html=$('tbody').children().eq(0).html();
 
@@ -17,6 +19,7 @@ var xuhao = 2;
                 //var flag=checkQuantityInput();
                 if(checkQuantityInput('.quantity')){
                     $('#last_row').before('<tr>'+get_html.replace('<td>1</td>','<td>'+ xuhao++ +'</td>')+'</tr>');
+                    $('.quantity').eq(xuhao-2).focus()
                 };
             });
 
@@ -52,9 +55,22 @@ var xuhao = 2;
                 $.ajax({url:url,success:function(result){
                     tar.text(result);
                 }});
-                var tr=$(this).parentsUntil('tbody')
-                $(tr).find(".quantity").val('10');
-                //$(tar).next().children('.quantity').focus();
+                //var tr=$(this).parentsUntil('tbody')
+                //$(tr).find(".quantity").val('10');
+                $(tar).next().children('.quantity').focus();
+            });
+
+            $('#actions').click(function(){
+                //判断数量有没有空的，没有就可以提交了
+                if(checkQuantityInput('.quantity')){
+                    $('#order_quantity').val($('#quantity').text())
+                    $('#order_amount').val($('#amount').text())
+                    $('form').submit()
+                }
+                else{
+                    alert('有项目数量为空')
+                }
+                
             });
 
         });
@@ -111,19 +127,26 @@ var xuhao = 2;
             var d=new Date();
             year = d.getFullYear()
             month = d.getMonth() + 1
+            if(month<10){month='0'+String(month)}
             date = d.getDate()
+            if(date<10){date='0'+String(date)}
             return year + '-' + month + '-' + date
         };
 
         function getOrderId(ordate,name){
             var d=new Date()
             hour = d.getHours()
+            if(hour<10){hour='0'+String(hour)}
             min = d.getMinutes()
+            if(min<10){min='0'+String(min)}
             sec = d.getSeconds()
+            if(sec<10){sec='0'+String(sec)}
             var c = new Date(ordate)
             year = c.getFullYear()
             month = c.getMonth() + 1
+            if(month<10){month='0'+String(month)}
             day = c.getDate()
-            return year+String(month)+day+String(hour)+String(min)+sec+'-'+name
+            if(day<10){day='0'+String(day)}
+            return year+month+day+hour+min+sec+'-'+name
         };
 

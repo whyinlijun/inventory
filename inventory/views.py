@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from inventory import app, db
 from inventory.forms import ClothForm
-from inventory.models import Cloth, Customer, Goods
+from inventory.models import Cloth, Customer, Goods, Orders
 
 
 @app.route('/addcloth', methods=['GET', 'POST'])
@@ -51,17 +51,32 @@ def index():
 
 @app.route("/add", methods=['GET','POST'])
 def add():
+    # 测试传过来是同一个变量名称的方法
     if request.method=="POST":
         formData = request.form
         c_data = request.form.getlist('color')
         b_data = request.form.getlist('length')
         d_data = request.form.getlist('price')
-        
+        print(request.form.to_dict())
         return ';'.join(c_data)+ ';'.join(b_data)+';'.join(d_data)
     return render_template("add_cloth_order.html")
 
-@app.route('/test')
+@app.route('/test', methods=['POST', 'GET'])
 def test():
     custom=Customer.query.all()
     goods = Goods.query.all()
+    if request.method=="POST":
+        order = Orders()
+        order.ID = request.form.get('order_id')
+        order.customer = request.form.get('customer')
+        order.date = request.form.get('order_date')
+        order.amount = int(request.form.get('order_amount'))
+        order.quantity = float(request.form.get('order_quantity'))
+        db.session.add(order)
+        db.session.commit()
+        print(request.form.to_dict())
+
+        print(order.ID)
+ 
     return render_template("addorder.html", data={'custom':custom, 'goods':goods})
+
