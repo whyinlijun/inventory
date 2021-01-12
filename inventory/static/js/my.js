@@ -1,4 +1,4 @@
-var xuhao = 2;
+var xuhao=2;
         $(function(){
             //设置日期
             $("#order_date").val(myDate());
@@ -17,8 +17,9 @@ var xuhao = 2;
             $('#add_row').click(function(){
                 //当有输入框数量没有输入时，不可以增加一行
                 //var flag=checkQuantityInput();
+                console.log('click');
                 if(checkQuantityInput('.quantity')){
-                    $('#last_row').before('<tr>'+get_html.replace('<td>1</td>','<td>'+ xuhao++ +'</td>')+'</tr>');
+                    $('#last_row').before('<tr>'+get_html.replace('1', xuhao++ )+'</tr>');
                     $('.quantity').eq(xuhao-2).focus()
                 };
             });
@@ -41,6 +42,7 @@ var xuhao = 2;
                 };
                 //小计金额
                 $(this).parent().next().text(amount)
+                //$(this).parent().next().children('input').val(amount)
                 //总计金额
                 $("#amount").text(mytotal(5));
                 //总计数量

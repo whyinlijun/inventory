@@ -39,14 +39,14 @@
                 
                 <tr>
                     <td style="vertical-align: middle;">1</td>
-                    <td><select class="form-control goods" name='goods'>
+                    <td><select class="form-control goods" name='goods_name'>
                         {% for item in data['goods'] %}
                         <option value="{{item.id}}">{{item.name}}</option>
                         {% endfor %}
                     </select></td>
                     <td style="text-align: right; vertical-align: middle;" name='price'>{{data['goods'][0].price}}</td>
-                    <td ><input type="number" class="form-control quantity" style="text-align: right; " name="quantity" placeholder="请输入数量"  autocomplete="off" required></td>
-                    <td style="text-align: right; vertical-align: middle;">-</td>
+                    <td ><input type="number" class="form-control quantity" style="text-align: right; " name="quantity"   autocomplete="off" required></td>
+                    <td style="text-align: right; vertical-align: middle;" >-<input type='hidden'   name='amount'></td>
                     <td><span id='del_row' style="vertical-align: middle;" onclick='delRow(this)'>X</span></td>
                 </tr>
                 <tr id='last_row' style="font-size: large;">

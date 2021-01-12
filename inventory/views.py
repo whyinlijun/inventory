@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from inventory import app, db
 from inventory.forms import ClothForm
-from inventory.models import Cloth, Customer, Goods, Orders
+from inventory.models import Cloth, Customer, Goods, Orders, OrderDetail
 
 
 @app.route('/addcloth', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def add():
         c_data = request.form.getlist('color')
         b_data = request.form.getlist('length')
         d_data = request.form.getlist('price')
-        print(request.form.to_dict())
+        print(request.form.getlist('color'))
         return ';'.join(c_data)+ ';'.join(b_data)+';'.join(d_data)
     return render_template("add_cloth_order.html")
 
@@ -72,11 +72,22 @@ def test():
         order.date = request.form.get('order_date')
         order.amount = int(request.form.get('order_amount'))
         order.quantity = float(request.form.get('order_quantity'))
-        db.session.add(order)
-        db.session.commit()
-        print(request.form.to_dict())
+        #db.session.add(order)
+        od = OrderDetail()
+        od.id = request.form.get('order_id')
+        '''
+        for od.goods_name, od.goods_quantity, od.goods_amount in zip(
+            request.form.getlist('goods'), request.form.getlist('quantity'), request.form.getlist('amount')):
+            print(od.goods_name, od.goods_quantity, od.goods_amount)
+        #db.session.commit()
+        '''
+        
+   
 
-        print(order.ID)
+
+        print(request.form.getlist('goods_name'))
+        print(request.form.getlist('amount'))
+        print(request.form.getlist('quantity'))
  
     return render_template("addorder.html", data={'custom':custom, 'goods':goods})
 
