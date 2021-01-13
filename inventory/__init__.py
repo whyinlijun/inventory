@@ -12,6 +12,10 @@ db = SQLAlchemy(app)
 def say_hello():
     click.echo('Initialized the database.')
 
+@app.shell_context_processor
+def make_shell_context():
+    return dict(db=db)
+
 from inventory import views
 
 

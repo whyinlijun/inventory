@@ -44,10 +44,10 @@ def get_price():
 
 @app.route('/')
 def index():
-    datas = Cloth.query.all()
-    for item in datas:
-        print(item.color_name)
-    return render_template('index.html', datas=datas)
+    od = Orders.query.all()
+    odt = OrderDetail.query.all()
+    print(od)
+    return render_template('index.html', data={'od':od, 'odt':odt})
 
 @app.route("/add", methods=['GET','POST'])
 def add():
@@ -67,27 +67,23 @@ def test():
     goods = Goods.query.all()
     if request.method=="POST":
         order = Orders()
-        order.ID = request.form.get('order_id')
+        order.id = request.form.get('order_id')
         order.customer = request.form.get('customer')
         order.date = request.form.get('order_date')
         order.amount = int(request.form.get('order_amount'))
         order.quantity = float(request.form.get('order_quantity'))
-        #db.session.add(order)
-        od = OrderDetail()
-        od.id = request.form.get('order_id')
-        '''
-        for od.goods_name, od.goods_quantity, od.goods_amount in zip(
-            request.form.getlist('goods'), request.form.getlist('quantity'), request.form.getlist('amount')):
-            print(od.goods_name, od.goods_quantity, od.goods_amount)
-        #db.session.commit()
-        '''
-        
-   
+        db.session.add(order)
 
+        for x, y, z in zip(
+            request.form.getlist('goods_id'), [int(x) for x in request.form.getlist('quantity')], request.form.getlist('amount')):
+            od = OrderDetail()
+            od.order_id = request.form.get('order_id')
+            od.goods_id=x
+            od.goods_quantity=y
+            od.goods_amount=z
+            db.session.add(od)
+        db.session.commit()
 
-        print(request.form.getlist('goods_name'))
-        print(request.form.getlist('amount'))
-        print(request.form.getlist('quantity'))
  
     return render_template("addorder.html", data={'custom':custom, 'goods':goods})
 

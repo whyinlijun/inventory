@@ -8,8 +8,8 @@
     <div class="row">
         <div class="col-xs-7 " >
             <h1 style="text-align:center;">销 售 单</h1>
+            <form role="form" action='/test'method='post'>
             <table  class="table table-striped">
-                <form role="form" action='/test'method='post'>
                 <caption>
                     <div class="row">
                         <div class="col-xs-4"><input id='order_id' name='order_id' type='text' class="form-control" readonly></div>
@@ -34,19 +34,20 @@
                     <td> </td>
                 </tr>
                 </thead>
-                
                 <tbody>
-                
                 <tr>
                     <td style="vertical-align: middle;">1</td>
-                    <td><select class="form-control goods" name='goods_name'>
+                    <td><select class="form-control goods" name='goods_id'>
                         {% for item in data['goods'] %}
                         <option value="{{item.id}}">{{item.name}}</option>
                         {% endfor %}
                     </select></td>
                     <td style="text-align: right; vertical-align: middle;" name='price'>{{data['goods'][0].price}}</td>
-                    <td ><input type="number" class="form-control quantity" style="text-align: right; " name="quantity"   autocomplete="off" required></td>
-                    <td style="text-align: right; vertical-align: middle;" >-<input type='hidden'   name='amount'></td>
+                    <td >
+                        <input type="number" class="form-control quantity" style="text-align: right; " name="quantity"   autocomplete="off" required>
+                        <input type='hidden'  name='amount'>
+                    </td>
+                    <td style="text-align: right; vertical-align: middle;" >-</td>
                     <td><span id='del_row' style="vertical-align: middle;" onclick='delRow(this)'>X</span></td>
                 </tr>
                 <tr id='last_row' style="font-size: large;">
@@ -60,12 +61,11 @@
                     <td id='amount' style="text-align: right;">0</td>
                     <td ><span id='add_row' >+</span></td>
                 </tr>
-            
                 </tbody>
-            </form>
             </table>
+        </form>
     </div>
 </div>
-</div>
+
 
 {% endblock %}

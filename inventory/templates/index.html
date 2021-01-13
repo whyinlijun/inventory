@@ -1,19 +1,34 @@
-<table border=1>
-    <tr>
-        <th>序号</th>
-        <th>颜色</th>
-        <th>门幅</th>
-        <th>供应商</th>
-        <th>材质</th>
-    </tr>
-{% for data in datas %}
-<tr>
-    <td>{{data.id}}</td>
-    <td>{{data.color_name}}</td>
-    <td>{{data.width}}</td>
-    <td>{{data.supplier}}</td>
-    <td>{{data.fibre}}</td>
+{% extends 'base.html' %}
+{% block title %}首页{% endblock %}
 
-</tr>
-{% endfor %}
+{% block content %}
+
+<h1>订单汇总表</h1>
+<table class="table table-striped">
+    {% for item in data['od'] %}
+    <tr>
+       
+        <td>{{ item.id }}</td>
+        <td>{{ item.customer }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.amount }}</td>
+        <td>{{ item.date }}</td>
+
+    </tr>
+    {% endfor %}
 </table>
+<h1>订单详情</h1>
+<table class="table table-striped">
+    {% for item in data['odt'] %}
+    <tr>
+       
+        <td>{{ item.order_id }}</td>
+        <td>{{ item.goods_name }}</td>
+        <td>{{ item.goods_quantity }}</td>
+        <td>{{ item.goods_amount }}</td>
+        
+
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
