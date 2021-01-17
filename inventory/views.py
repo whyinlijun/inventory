@@ -35,18 +35,23 @@ def add_customer():
         cus_dict[item.id]=item.name
     return cus_dict
 
+@app.route('/addgoods/<goodsname>/<goodsprice>')
+def add_goods(goodsname, goodsprice):
+    gs = Goods(name=goodsname, price=float(goodsprice))
+    db.session.add(gs)
+    db.session.commit()
+    return goodsname+goodsprice
+
 @app.route('/getprice')
 def get_price():
     if 'id' in request.values:
         price = Goods.query.get(int(request.values.get('id')))
-        print(price.price)
     return str(price.price)
 
 @app.route('/')
 def index():
     od = Orders.query.all()
     odt = OrderDetail.query.all()
-    print(od)
     return render_template('index.html', data={'od':od, 'odt':odt})
 
 @app.route("/add", methods=['GET','POST'])
@@ -57,7 +62,6 @@ def add():
         c_data = request.form.getlist('color')
         b_data = request.form.getlist('length')
         d_data = request.form.getlist('price')
-        print(request.form.getlist('color'))
         return ';'.join(c_data)+ ';'.join(b_data)+';'.join(d_data)
     return render_template("add_cloth_order.html")
 

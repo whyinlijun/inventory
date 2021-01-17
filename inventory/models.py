@@ -1,5 +1,44 @@
 from inventory import db
 
+class Customer(db.Model):
+    #客户信息表
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+
+    def __repr__(self):
+        return '<Customer %r>' %self.name
+
+class Goods(db.Model):
+    #商品信息表
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), unique=True)
+    price = db.Column(db.Float)
+    order_id = db.relationship('OrderDetail',back_populates='goods_name')
+
+    def __repr__(self):
+        return '<Goods %r>' %self.name
+
+class Orders(db.Model):
+    #订单表
+    id = db.Column(db.String(30), primary_key=True)
+    customer = db.Column(db.String(20))
+    date = db.Column(db.String(15), index=True)
+    quantity = db.Column(db.Integer)
+    amount = db.Column(db.Float)
+    pay = db.Column(db.Boolean, default=True)
+
+
+class OrderDetail(db.Model):
+    #订单详情
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.String(30), index=True)
+    goods_id = db.Column(db.Integer, db.ForeignKey('goods.id'))
+    #goods_id = db.Column(db.Integer)
+    goods_name = db.relationship('Goods', back_populates='order_id')
+    goods_quantity = db.Column(db.Integer)
+    goods_amount = db.Column(db.Float)
+
+
 class ClothInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True) #ID,唯一默认
     date = db.Column(db.Date, index=True) #日期
@@ -17,52 +56,6 @@ class Cloth(db.Model):
     width = db.Column(db.Float)
     fibre = db.Column(db.String(50))
     photo = db.Column(db.LargeBinary)
-
-    def __repr__(self):
-        return '<Cloth %r>' % self.color_name
-
-class Customer(db.Model):
-    #客户信息表
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
-
-    def __repr__(self):
-        return '<Customer %r>' % self.name
-
-class Goods(db.Model):
-    #商品信息表
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), unique=True)
-    price = db.Column(db.Float)
-    order_id = db.relationship('OrderDetail', back_populates='order_id')
-
-    def __init__(self, name, price):
-        self.name = name
-        self.price = price
-
-    def __repr__(self):
-        return '<Goods %r>' % self.name
-
-class Orders(db.Model):
-    #订单表
-    id = db.Column(db.String(30), primary_key=True)
-    customer = db.Column(db.String(20))
-    date = db.Column(db.String(15), index=True)
-    quantity = db.Column(db.Integer)
-    amount = db.Column(db.Float)
-
-    def __repr__(self):
-        return '<Orders %r>' % self.id
-
-class OrderDetail(db.Model):
-    #订单详情
-    id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.String(30), index=True)
-    goods_id = db.Column(db.Integer, db.ForeignKey('goods.id'))
-    goods_name = db.relationship('Goods', back_populates='name')
-    goods_quantity = db.Column(db.Integer)
-    goods_amount = db.Column(db.Float)
-
 
 
 
