@@ -65,8 +65,8 @@ def add():
         return ';'.join(c_data)+ ';'.join(b_data)+';'.join(d_data)
     return render_template("add_cloth_order.html")
 
-@app.route('/test', methods=['POST', 'GET'])
-def test():
+@app.route('/addorder', methods=['POST', 'GET'])
+def addOrder():
     custom=Customer.query.all()
     goods = Goods.query.all()
     if request.method=="POST":
@@ -87,7 +87,19 @@ def test():
             od.goods_amount=z
             db.session.add(od)
         db.session.commit()
-
- 
+        return redirect(url_for('ordersList'))
     return render_template("addorder.html", data={'custom':custom, 'goods':goods})
+
+@app.route('/orderslist')
+def ordersList():
+    od = Orders.query.order_by(db.desc(Orders.date)).all()
+    return render_template('listorders.html',od=od)
+
+@app.route('/orderview/<orderid>')
+def orderView(orderid):
+    od = Orders.query.filter(Orders.id==orderid).first()
+    ods = OrderDetail.query.filter(OrderDetail.order_id==orderid).all()
+    return render_template('orderview.html', data = {'od':od, 'ods':ods})
+
+
 
