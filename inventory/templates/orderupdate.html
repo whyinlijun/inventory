@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}销 售 单 更 新{% endblock %}
+
+{% block content %}
+
+        
+    <div class="row">
+        <div class="col-xs-7 " >
+            <h1 style="text-align:center;">销 售 单 更 新</h1>
+            <form role="form" method='post'>
+            <table  class="table table-striped">
+                <caption>
+                    <div class="row">
+                        <div class="col-xs-4"><input id='order_id' name='order_id' type='text' class="form-control" value="{{data['od'].id}}" readonly></div>
+                        <div class="col-xs-4">
+                            <select class="form-control" id='customer' name='customer'>
+                                {% for item in data['custom'] %}
+                                <option {% if item.name==data['od'].customer %} selected {% endif %}>{{item.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-xs-3">
+                             <input name='order_date' type="date"  id="order_date" class="form-control" required style="width:220px;" value="{{data['od'].date}}">
+                        </div>
+                    </div>
+                </caption>
+                <thead>
+                <tr >
+                    <th style="text-align: center;">序号</th>
+                    <th style="text-align: center;">品名</th> <!--这里要用选择更表框-->
+                    <th style="text-align: center;">单价</th> <!--品名选定，单价就要出来-->
+                    <th style="text-align: right;">数量</th>  
+                    <th style="text-align: right;">小计</th> <!--如果单价和数量都有，小计就要出来结果-->
+                    <td> </td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for od in data['ods'] %}        
+                <tr>
+                    <td style="vertical-align: middle;">{{ loop.index }}</td>
+                    <td><select class="form-control goods" name='goods_id'>
+                        {% for item in data['goods'] %}
+                        <option value="{{item.id}}" {% if item.name==od.goods_name.name %} selected {% endif %}>{{item.name}}</option>
+                        {% endfor %}
+                    </select></td>
+                    <td style="text-align: right; vertical-align: middle;" name='price'>{{ od.goods_name.price}}</td>
+                    <td >
+                        <input type="number" class="form-control quantity" style="text-align: right; " name="quantity" value="{{ od.goods_quantity}}"   autocomplete="off" required>
+                        <input type='hidden'  name='amount' value="{{ od.goods_amount }}">
+                    </td>
+                    <td style="text-align: right; vertical-align: middle;" >{{ od.goods_amount }}</td>
+                    <td><span id='del_row' style="vertical-align: middle;" onclick='delRow(this)'>X</span></td>
+                </tr>
+            
+                {% endfor %}
+                <tr id='last_row' style="font-size: large;">
+                    <td ></td>
+                    <td><input type='button' class="form-control" id='actions' value='提交'></td>
+                    <td>
+                        <input type='hidden' id='order_quantity' name='order_quantity'>
+                        <input type='hidden' id='order_amount' name='order_amount'>
+                    </td>
+                    <td id='quantity' style="text-align: right;">{{data['od'].quantity}}</td>
+                    <td id='amount' style="text-align: right;">{{data['od'].amount}}</td>
+                    <td ><span id='add_row' >+</span></td>
+                </tr>
+                </tbody>
+            </table>
+            
+        </form>
+    </div>
+
+
+
+{% endblock %}

@@ -1,1 +1,7 @@
 .num { text-align:right; padding-right:10px;}
+ul{margin:10px auto; text-align:right;}
+@media print {
+    .noprint{
+      display: none;
+    }
+  }

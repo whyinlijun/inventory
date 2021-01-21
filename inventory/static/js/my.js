@@ -2,7 +2,9 @@
 $(function(){
     xuhao=$('.quantity').length+1;
     //设置日期
-    $("#order_date").val(myDate());
+    if($("#order_date").val()==''){
+        $("#order_date").val(myDate());
+    }
     if($("#order_id").val()==''){
         $("#order_id").val(getOrderId($("#order_date").val()));
     }
@@ -63,8 +65,7 @@ $(function(){
         $.ajax({url:url,success:function(result){
             tar.text(result);
         }});
-        //var tr=$(this).parentsUntil('tbody')
-        //$(tr).find(".quantity").val('10');
+        
         $(tar).next().children('.quantity').focus();
     });
 

@@ -14,7 +14,7 @@
         <td>操作</td>
     </thead>
     <tbody>
-    {% for item in od %}
+    {% for item in data['od'] %}
     <tr>
        
         <td>{{ item.id }}</td>
@@ -24,13 +24,23 @@
         <td>{{ item.date }}</td>
         <td>
             <a href="{{url_for('orderView',orderid=item.id)}}">查看详情</a>
-            <a>编辑</a>
-            <a>删除</a>
+            <a href="{{url_for('orderDel',orderid=item.id)}}">删除</a>
+            <a href="{{url_for('orderUpdate',orderid=item.id)}}">编辑</a>
         </td>
 
     </tr>
     {% endfor %}
 </tbody>
 </table>
+
+<table class="table table-stdiped">
+    {% for item in data['ods'] %}
+    <tr>
+        <td>{{ item.order_id }}</td>
+        <td>{{ item.goods_name.name }}</td>
+        <td>{{ item.goods_quantity }}</td>
+        <td>{{ item.goods_amount }}</td>
+    </tr>
+    {% endfor %}
 
 {% endblock %}

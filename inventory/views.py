@@ -54,46 +54,20 @@ def index():
     odt = OrderDetail.query.all()
     return render_template('index.html', data={'od':od, 'odt':odt})
 
-@app.route("/add", methods=['GET','POST'])
-def add():
-    # 测试传过来是同一个变量名称的方法
-    if request.method=="POST":
-        formData = request.form
-        c_data = request.form.getlist('color')
-        b_data = request.form.getlist('length')
-        d_data = request.form.getlist('price')
-        return ';'.join(c_data)+ ';'.join(b_data)+';'.join(d_data)
-    return render_template("add_cloth_order.html")
-
 @app.route('/addorder', methods=['POST', 'GET'])
 def addOrder():
     custom=Customer.query.all()
     goods = Goods.query.all()
     if request.method=="POST":
-        order = Orders()
-        order.id = request.form.get('order_id')
-        order.customer = request.form.get('customer')
-        order.date = request.form.get('order_date')
-        order.amount = int(request.form.get('order_amount'))
-        order.quantity = float(request.form.get('order_quantity'))
-        db.session.add(order)
-
-        for x, y, z in zip(
-            request.form.getlist('goods_id'), [int(x) for x in request.form.getlist('quantity')], request.form.getlist('amount')):
-            od = OrderDetail()
-            od.order_id = request.form.get('order_id')
-            od.goods_id=x
-            od.goods_quantity=y
-            od.goods_amount=z
-            db.session.add(od)
-        db.session.commit()
+        add_order()
         return redirect(url_for('ordersList'))
     return render_template("addorder.html", data={'custom':custom, 'goods':goods})
 
 @app.route('/orderslist')
 def ordersList():
-    od = Orders.query.order_by(db.desc(Orders.date)).all()
-    return render_template('listorders.html',od=od)
+    od = Orders.query.order_by(db.desc(Orders.id)).all()
+    ods = OrderDetail.query.order_by(db.desc(OrderDetail.order_id)).all()
+    return render_template('listorders.html', data={'od':od, 'ods':ods})
 
 @app.route('/orderview/<orderid>')
 def orderView(orderid):
@@ -101,5 +75,51 @@ def orderView(orderid):
     ods = OrderDetail.query.filter(OrderDetail.order_id==orderid).all()
     return render_template('orderview.html', data = {'od':od, 'ods':ods})
 
+@app.route('/orderdel/<orderid>')
+def orderDel(orderid):
+    od = Orders.query.filter(Orders.id==orderid).first()
+    ods = OrderDetail.query.filter(OrderDetail.order_id==orderid).all()
+    db.session.delete(od)
+    for item in ods:
+        db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for('ordersList'))
+
+@app.route('/orderupdate/<orderid>', methods=['POST', 'GET'])
+def orderUpdate(orderid):
+    od = Orders.query.filter(Orders.id==orderid).first()
+    ods = OrderDetail.query.filter(OrderDetail.order_id==orderid).all()
+    custom=Customer.query.all()
+    goods = Goods.query.all()
+
+    if request.method=='POST':
+        db.session.delete(od)
+        for item in ods:
+            db.session.delete(item)
+        
+        add_order()
+        return redirect(url_for('ordersList'))
+    
+
+    return render_template("orderupdate.html", data={'custom':custom, 'goods':goods, 'od':od, 'ods':ods,'xuhao':1})
+
+def add_order():
+    order = Orders()
+    order.id = request.form.get('order_id')
+    order.customer = request.form.get('customer')
+    order.date = request.form.get('order_date')
+    order.amount = int(request.form.get('order_amount'))
+    order.quantity = float(request.form.get('order_quantity'))
+    db.session.add(order)
+
+    for x, y, z in zip(
+        request.form.getlist('goods_id'), [int(x) for x in request.form.getlist('quantity')], request.form.getlist('amount')):
+        od = OrderDetail()
+        od.order_id = request.form.get('order_id')
+        od.goods_id=x
+        od.goods_quantity=y
+        od.goods_amount=z
+        db.session.add(od)
+    db.session.commit()
 
 
