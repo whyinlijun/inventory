@@ -1,3 +1,4 @@
+#_*_ coding:utf-8 _*_
 import sqlite3
 import click
 from flask import current_app, g

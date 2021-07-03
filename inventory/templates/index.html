@@ -3,11 +3,11 @@
 
 {% block content %}
 
-<h1>订单汇总表</h1>
+<h1>订单列表</h1>
 <table class="table table-striped">
     {% for item in data['od'] %}
     <tr>
-       
+
         <td>{{ item.id }}</td>
         <td>{{ item.customer }}</td>
         <td>{{ item.quantity }}</td>
@@ -17,16 +17,16 @@
     </tr>
     {% endfor %}
 </table>
-<h1>订单详情</h1>
+<h1>订单明细</h1>
 <table class="table table-striped">
     {% for item in data['odt'] %}
     <tr>
-       
+
         <td>{{ item.order_id }}</td>
         <td>{{ item.goods_name.name }}</td>
         <td>{{ item.goods_quantity }}</td>
         <td>{{ item.goods_amount }}</td>
-        
+
 
     </tr>
     {% endfor %}

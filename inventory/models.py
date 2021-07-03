@@ -1,3 +1,4 @@
+#_*_ coding:utf-8 _*_
 from inventory import db
 
 class Customer(db.Model):
@@ -47,7 +48,7 @@ class ClothInfo(db.Model):
     price = db.Column(db.Float)  #价格
     use_length = db.Column(db.Float, default=0.00) #已用长度
     use_finish = db.Column(db.Boolean, default=False) #用完标志
-    memo = db.Column(db.Text) 
+    memo = db.Column(db.Text)
 
 class Cloth(db.Model):
     id = db.Column(db.Integer, primary_key=True)

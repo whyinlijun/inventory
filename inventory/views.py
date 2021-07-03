@@ -1,3 +1,4 @@
+#_*_ coding:utf-8 _*_
 from flask import render_template, redirect, url_for, request
 from inventory import app, db
 from inventory.forms import ClothForm
@@ -96,10 +97,10 @@ def orderUpdate(orderid):
         db.session.delete(od)
         for item in ods:
             db.session.delete(item)
-        
+
         add_order()
         return redirect(url_for('ordersList'))
-    
+
 
     return render_template("orderupdate.html", data={'custom':custom, 'goods':goods, 'od':od, 'ods':ods,'xuhao':1})
 
